@@ -10,8 +10,8 @@ var sanitize = require("sanitize-filename");
 var SpiderGenerator = yeoman.generators.Base.extend({
   initializing: function () {
     this.pkg = require('../package.json');
-    this.root = process.cwd();
-    this.config = require(this.root + '/spidersock.json');
+    this.root = '';
+    this.config = require(process.cwd()+ '/spidersock.json');
   },
 
   prompting: function () {
@@ -55,9 +55,12 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function (props) {
       this.componentName  = props.componentName;
-      this.componentSlug  = sanitize(props.componentSlug.replace(/\s+/g, '-').toLowerCase().split());
+      this.componentSlug  = sanitize(props.componentSlug.replace(/\s+/g, '-').toLowerCase());
       this.componentGroup = props.componentGroup;
       this.componentType  = props.componentType;
+
+      this.root =  './' + ( this.config['installer-path'] ? this.config['installer-path'] : 'components/' ) + this.componentType + '/' + this.componentGroup + '/' + this.componentSlug + '/';
+      this.destinationRoot(this.root);
 
       done();
     }.bind(this));
@@ -65,29 +68,39 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 
   writing: {
     app: function () {
-      var self = this;
-      var path = self.root + self.config['installer-path'] + '/components/' + self.componentType + '/' + self.componentGroup + '/' + self.componentSlug + '/';
+      var _controller =this.readFileAsString(this.sourceRoot() + '/_controller.scss');
+      var _scss_core = this.readFileAsString(this.sourceRoot() + '/_component.scss');
+      var _scss_theme = this.readFileAsString(this.sourceRoot() + '/_theme.scss');
+     
+      this.src.copy('README.md', 'README.md');
+      this.mkdir('theme');
+      this.mkdir('core/lib');
+ 
+      this.writeFileFromString(
+        _controller.split('/core/').join('/core/' +  this.componentSlug), 
+        '_controller.scss'
+      );
 
-      console.log(path);
-      mkdirp(path, function (err) {
-          if (err){
-            throw (err);
-          } 
+      this.writeFileFromString(
+        _scss_theme.split('{{Name}}').join( this.componentName), 
+        'theme/_' + this.componentSlug + '-theme.scss'
+      );
 
-          self.src.copy('README.md', 'package.json');
-      });
+      this.writeFileFromString(
+        _scss_core.split('{{Name}}').join( this.componentName), 
+        'core/' + this.componentSlug + '.scss'
+      );
 
 
-    },
-
-    projectfiles: function () {
-      this.src.copy('editorconfig', '.editorconfig');
-      this.src.copy('jshintrc', '.jshintrc');
     }
+
+
   },
 
+
+
   end: function () {
-    this.installDependencies();
+    //this.installDependencies();
   }
 });
 
