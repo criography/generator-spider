@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'generator-spider' ]; then cd .. && eval "mv $currentfolder generator-spider" && cd generator-spider; fi
+
