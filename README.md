@@ -1,8 +1,6 @@
-> [Yeoman](http://yeoman.io) generator
+### How to use
 
-### How to use Yeoman Generators
-
-First make sure you have Yeoman running, if not get it by running this command in your terminal:
+First make sure you have [Yeoman](http://yeoman.io) running, if not get it by running this command in your terminal:
 ```bash
 npm install -g yo
 ```
