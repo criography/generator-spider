@@ -1,4 +1,6 @@
 /**
+ * @TODO: install to spider_modules first, then move to components and add to project's bower.json
+ * @TODO: create repository
  * @TODO: refactor all vars into object for better readability
  * @TODO: unify used I/O methods. Make everything async?
  * @TODO: make everything mustache, instead of split/join? Or not.
