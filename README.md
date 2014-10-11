@@ -1,5 +1,3 @@
-# generator-spider [![Build Status](https://secure.travis-ci.org/criography/generator-spider.png?branch=master)](https://travis-ci.org/criography/generator-spider)
-
 > [Yeoman](http://yeoman.io) generator
 
 ### How to use Yeoman Generators
