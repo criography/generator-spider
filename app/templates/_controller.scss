@@ -2,7 +2,8 @@
   * CORE IMPORTS
   * ===================================================== */
 
-@import ('../core/');
+@import '../core/_{{slug}}.scss';
+@import '../theme/_{{slug}}-theme.scss';
 
 
 

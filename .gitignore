@@ -1,1 +1,64 @@
-node_modules/
+# IDE generated files #
+######################
+
+### SublimeText ###
+*.sublime-workspace
+sftp-config.json
+
+### PhpStorm ###
+.idea/
+
+### CodeKit ###
+*/codekit-config.json
+*/config.codekit
+
+### Eclipse ###
+*.pydevproject
+.metadata
+.gradle
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+### vim ###
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+
+
+
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+
+
+
+
+# Compilers generated files #
+#############################
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+pids
+logs
+results
+npm-debug.log
+node_modules
+vendor
