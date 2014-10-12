@@ -89,7 +89,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			this.componentType = props.componentType;
 			this.componentDeps = props.componentDeps;
 
-			this.componentPath = this.componentType + '/' + this.componentGroup + '/' + this.componentSlug;
+			this.componentPath = this.componentType + 's/' + this.componentGroup + '/' + this.componentSlug;
 			this.componentRoot = './' + ( this.sockConfig['installer-path'] || 'components/' ) + this.componentPath + '/';
 			this.destinationRoot(this.componentRoot);
 
