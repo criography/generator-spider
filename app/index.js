@@ -170,7 +170,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			/* generate core SCSS file */
 			this.writeFileFromString(
 				_scss_core.split('{{Name}}').join(this.componentName),
-				'core/' + this.componentSlug + '.scss'
+				'core/_' + this.componentSlug + '.scss'
 			);
 			console.log(chalk.green('   create ') + this.componentSlug + '.scss');
 
