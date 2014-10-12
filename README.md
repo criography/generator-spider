@@ -1,4 +1,5 @@
-### How to use
+How to use
+==========
 
 First make sure you have [Yeoman](http://yeoman.io) running, if not get it by running this command in your terminal:
 ```bash
@@ -16,7 +17,10 @@ Finally, initiate the generator:
 ```bash
 yo spider
 ```
-### Dependencies
+
+Dependencies
+============
+
 In order for the whole thing to work, the project root has to contain ***spidersock.json*** file, which should look like this:
 ```json
 {
@@ -38,9 +42,12 @@ In order for the whole thing to work, the project root has to contain ***spiders
 	"license": "BSD"
 }
 ```
+
 Few things to note:
-1. marker value defaults to what's shown above, so it's technically optional.
-2. your controller SCSS should follow this or similar structure:
+-------------------
+
+ 1. marker value defaults to what's shown above, so it's technically optional.
+ 2. your controller SCSS should follow this or similar structure:
 ```scss
 /* COMPONENTS: ATOMS */
 @import "atoms/group/component-name/controller";
@@ -60,5 +67,6 @@ Few things to note:
 ## License
 
 MIT
+
 
 
