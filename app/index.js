@@ -162,7 +162,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			/* generate theme SCSS file */
 			this.writeFileFromString(
 				_scss_theme.split('{{Name}}').join(this.componentName),
-				'theme/' + this.componentSlug + '-theme'
+				'theme/_' + this.componentSlug + '-theme.scss'
 			);
 			console.log(chalk.green('   create ') + this.componentSlug + '-theme.scss');
 
@@ -170,7 +170,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			/* generate core SCSS file */
 			this.writeFileFromString(
 				_scss_core.split('{{Name}}').join(this.componentName),
-				'core/' + this.componentSlug
+				'core/_' + this.componentSlug + '.scss'
 			);
 			console.log(chalk.green('   create ') + this.componentSlug + '.scss');
 

@@ -1,6 +1,6 @@
 {
   "name": "generator-spider",
-  "version": "0.5.42",
+  "version": "0.5.43",
   "description": "Yeoman SpiderSock component generator",
   "license": "MIT",
   "main": "app/index.js",
