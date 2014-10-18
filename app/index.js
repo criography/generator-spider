@@ -57,7 +57,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			{
 				type    : 'input',
 				name    : 'componentSlug',
-				message : 'Gimme thy component\'s slug. [a-z0-9-_]'
+				message : 'Gimme thy component\'s slug. [A-Za-z0-9-_]'
 			},
 
 			{
@@ -84,7 +84,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 
 		this.prompt(prompts, function(props){
 			this.componentName = props.componentName;
-			this.componentSlug = sanitize(props.componentSlug.replace(/\s+/g, '-').toLowerCase());
+			this.componentSlug = sanitize(props.componentSlug.replace(/\s+/g, '-'));
 			this.componentGroup = props.componentGroup;
 			this.componentType = props.componentType;
 			this.componentDeps = props.componentDeps;
