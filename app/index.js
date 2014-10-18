@@ -70,7 +70,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 				type    : 'list',
 				name    : 'componentType',
 				message : 'What type of component is it?',
-				choices : ['atom', 'molecule', 'organism', 'layout', 'page'],
+				choices : ['atom', 'molecule', 'organism', 'template', 'page'],
 				default : 'atom'
 			},
 
