@@ -78,16 +78,42 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 				type    : 'input',
 				name    : 'componentDeps',
 				message : 'Any git dependencies? (comma separated git repo URLs only)'
+			},
+
+			{
+				type    : 'list',
+				name    : 'componentJs',
+				message : 'Create JS Module?',
+				choices : ['nope', 'yep'],
+				default : 'nope'
+			},
+
+			{
+				when    : function (props) {
+										return props.componentJs === 'yep';
+									},
+				name    : 'componentJsName',
+				type    : 'input',
+				message : 'OK then, so what\'s the filename of JS module?',
+				default : function(props){
+										return  props.componentSlug.replace(/[-_]+/g, ' ').
+															replace(/\b\w+/g, function (s) {
+																return s.charAt(0).toUpperCase() + s.substr(1);
+															}).
+															replace(/\s/g, '_') + '.js';
+									}
 			}
 
 		];
 
 		this.prompt(prompts, function(props){
-			this.componentName = props.componentName;
-			this.componentSlug = sanitize(props.componentSlug.replace(/\s+/g, '-'));
+			this.componentName  = props.componentName;
+			this.componentSlug  = sanitize(props.componentSlug.replace(/\s+/g, '-'));
 			this.componentGroup = props.componentGroup;
-			this.componentType = props.componentType;
-			this.componentDeps = props.componentDeps;
+			this.componentType  = props.componentType;
+			this.componentDeps  = props.componentDeps;
+			this.componentJs    = props.componentJs;
+			this.componentJsName= props.componentJsName;
 
 			this.componentPath = this.componentType + 's/' + this.componentGroup + '/' + this.componentSlug;
 			this.componentRoot = './' + ( this.sockConfig['installer-path'] || 'components/' ) + this.componentPath + '/';
@@ -102,16 +128,19 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 
 
 
+
+
 	writing : {
 		app : function(){
 			var self                = this;
 			var _controller         = this.readFileAsString(this.sourceRoot() + '/_controller.scss');
-			var _package            = this.readFileAsString(this.sourceRoot() + '/_package.json');
+			var _package            = require(this.sourceRoot() + '/_package.json');
 			var _spider             = this.readFileAsString(this.sourceRoot() + '/_spider.json');
 			var _bower              = this.readFileAsString(this.sourceRoot() + '/_bower.json');
 			var _scss_core          = this.readFileAsString(this.sourceRoot() + '/_component.scss');
 			var _scss_theme         = this.readFileAsString(this.sourceRoot() + '/_theme.scss');
-
+			var _js_core            = this.readFileAsString(this.sourceRoot() + '/module.js');
+			var _repo               = "{{repo}}";
 
 
 			/* create directory structure */
@@ -122,6 +151,7 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			/* copy templates */
 			this.src.copy('README.md', 'README.md');
 			this.src.copy('_bowerrc', '.bowerrc');
+			this.src.copy('index.html', 'index.html');
 
 
 			/* create spider.json */
@@ -135,12 +165,21 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			console.log(chalk.green('   create ') + 'spider.json');
 
 
+
+
+			/* update package.json */
+			_package.name = _package.name.split('{{name}}').join(self.componentName);
+			if (self.componentJsName) {
+				_package.main = 'core/' + self.componentJsName;
+			}
 			/* create package.json */
 			this.writeFileFromString(
-				_package.split('{{name}}').join(this.componentName),
+				JSON.stringify( _package, null, "\t" ),
 				'package.json'
 			);
 			console.log(chalk.green('   create ') + 'package.json');
+
+
 
 
 			/* create bower.json */
@@ -151,6 +190,8 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			console.log(chalk.green('   create ') + 'bower.json');
 
 
+
+
 			/* generate controller SCSS file */
 			this.writeFileFromString(
 				_controller.split('{{slug}}').join(this.componentSlug),
@@ -159,12 +200,16 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 			console.log(chalk.green('   create ') + '_controller.scss');
 
 
+
+
 			/* generate theme SCSS file */
 			this.writeFileFromString(
 				_scss_theme.split('{{Name}}').join(this.componentName),
 				'theme/_' + this.componentSlug + '-theme.scss'
 			);
 			console.log(chalk.green('   create ') + this.componentSlug + '-theme.scss');
+
+
 
 
 			/* generate core SCSS file */
@@ -176,8 +221,24 @@ var SpiderGenerator = yeoman.generators.Base.extend({
 
 
 
+
+			/* generate core JS file */
+			if(this.componentJs!=='nope'){
+				this.writeFileFromString(
+					mustache.render(
+						_js_core,
+						{"modulename": self.componentJsName.split('.js').join(''), "repo": _repo}
+					),
+					'core/' + this.componentJsName
+				);
+				console.log(chalk.green('   create ') + this.componentJsName );
+			}
+
+
+
+
 			/* update spidersock.json */
-			this.sockConfig.devDependencies[this.componentPath] = "{{repo}}";
+			this.sockConfig.devDependencies[this.componentPath] = _repo;
 			try{
 				fs.writeFileSync(this.sockConfigPath, JSON.stringify(this.sockConfig, null, "\t"), 'utf8');
 			} catch (err) {
