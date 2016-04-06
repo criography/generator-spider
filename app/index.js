@@ -18,7 +18,8 @@ var yosay     = require('yosay');
 var sanitize  = require("sanitize-filename");
 var chalk     = require('chalk');
 var mustache  = require('mustache');
-
+var htmlWiring= require("html-wiring");
+var mkdirp    = require('mkdirp');
 
 
 var SpiderGenerator = yeoman.Base.extend({
@@ -133,19 +134,19 @@ var SpiderGenerator = yeoman.Base.extend({
 	writing : {
 		app : function(){
 			var self                = this;
-			var _controller         = this.readFileAsString(this.sourceRoot() + '/_controller.scss');
+			var _controller         = htmlWiring.readFileAsString(this.sourceRoot() + '/_controller.scss');
 			var _package            = require(this.sourceRoot() + '/_package.json');
-			var _spider             = this.readFileAsString(this.sourceRoot() + '/_spider.json');
-			var _bower              = this.readFileAsString(this.sourceRoot() + '/_bower.json');
-			var _scss_core          = this.readFileAsString(this.sourceRoot() + '/_component.scss');
-			var _scss_theme         = this.readFileAsString(this.sourceRoot() + '/_theme.scss');
-			var _js_core            = this.readFileAsString(this.sourceRoot() + '/module.js');
+			var _spider             = htmlWiring.readFileAsString(this.sourceRoot() + '/_spider.json');
+			var _bower              = htmlWiring.readFileAsString(this.sourceRoot() + '/_bower.json');
+			var _scss_core          = htmlWiring.readFileAsString(this.sourceRoot() + '/_component.scss');
+			var _scss_theme         = htmlWiring.readFileAsString(this.sourceRoot() + '/_theme.scss');
+			var _js_core            = htmlWiring.readFileAsString(this.sourceRoot() + '/module.js');
 			var _repo               = "{{repo}}";
 
 
 			/* create directory structure */
-			this.mkdir('theme');
-			this.mkdir('core/lib');
+			mkdirp('theme');
+			mkdirp('core/lib');
 
 
 			/* copy templates */
@@ -266,7 +267,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 					/* check if file exists */
 					if( fs.existsSync(_file) ){
-						var _projectController = self.readFileAsString(_file);
+						var _projectController = htmlWiring.readFileAsString(_file);
 
 						/* inject reference to the component */
 						self.writeFileFromString(
