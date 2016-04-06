@@ -21,7 +21,7 @@ var mustache  = require('mustache');
 
 
 
-var SpiderGenerator = yeoman.generators.Base.extend({
+var SpiderGenerator = yeoman.Base.extend({
 	initializing : function(){
 		this.pkg                      = require('../package.json');
 		this.projectRoot              = process.cwd();
