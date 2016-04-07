@@ -153,9 +153,20 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* copy templates */
-			this.sourceRoot().copy('README.md', 'README.md');
-			this.sourceRoot().copy('_bowerrc', '.bowerrc');
-			this.sourceRoot().copy('index.html', 'index.html');
+		    this.fs.copyTpl(
+		      this.templatePath('README.md'),
+		      this.destinationPath('README.md')
+		    );		    
+
+		    this.fs.copyTpl(
+		      this.templatePath('_bowerrc'),
+		      this.destinationPath('_bowerrc')
+		    );		    
+
+		    this.fs.copyTpl(
+		      this.templatePath('index.html'),
+		      this.destinationPath('index.html')
+		    );
 
 
 			/* create spider.json */
