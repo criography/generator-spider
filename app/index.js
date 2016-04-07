@@ -22,6 +22,9 @@ var htmlWiring= require("html-wiring");
 var mkdirp    = require('mkdirp');
 
 
+
+
+
 var SpiderGenerator = yeoman.Base.extend({
 	initializing : function(){
 		this.pkg                      = require('../package.json');
@@ -150,9 +153,9 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* copy templates */
-			this.src.copy('README.md', 'README.md');
-			this.src.copy('_bowerrc', '.bowerrc');
-			this.src.copy('index.html', 'index.html');
+			this.sourceRoot().copy('README.md', 'README.md');
+			this.sourceRoot().copy('_bowerrc', '.bowerrc');
+			this.sourceRoot().copy('index.html', 'index.html');
 
 
 			/* create spider.json */
