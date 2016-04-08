@@ -20,7 +20,7 @@ var chalk     = require('chalk');
 var mustache  = require('mustache');
 var htmlWiring= require("html-wiring");
 var mkdirp    = require('mkdirp');
-
+const username  = require('username');
 
 
 
@@ -141,9 +141,9 @@ var SpiderGenerator = yeoman.Base.extend({
 			var _package            = require(this.sourceRoot() + '/_package.json');
 			var _spider             = htmlWiring.readFileAsString(this.sourceRoot() + '/_spider.json');
 			var _bower              = htmlWiring.readFileAsString(this.sourceRoot() + '/_bower.json');
-			var _scss_core          = htmlWiring.readFileAsString(this.sourceRoot() + '/_component.scss');
-			var _scss_theme         = htmlWiring.readFileAsString(this.sourceRoot() + '/_theme.scss');
-			var _js_core            = htmlWiring.readFileAsString(this.sourceRoot() + '/module.js');
+			var _scss_core          = this.sourceRoot() + '/_component.scss';
+			var _scss_theme         = this.sourceRoot() + '/_theme.scss';
+			var _js_core            = this.sourceRoot() + '/module.js';
 			var _repo               = "{{repo}}";
 
 
@@ -156,12 +156,12 @@ var SpiderGenerator = yeoman.Base.extend({
 		    this.fs.copyTpl(
 		      this.templatePath('README.md'),
 		      this.destinationPath('README.md')
-		    );		    
+		    );
 
 		    this.fs.copyTpl(
 		      this.templatePath('_bowerrc'),
 		      this.destinationPath('_bowerrc')
-		    );		    
+		    );
 
 		    this.fs.copyTpl(
 		      this.templatePath('index.html'),
@@ -170,7 +170,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* create spider.json */
-			this.writeFileFromString(
+			htmlWiring.writeFileFromString(
 				mustache.render(
 					_spider,
 					{"type" : this.componentType, "name" : this.componentName, "group": this.componentGroup, "slug": this.componentSlug}
@@ -188,7 +188,7 @@ var SpiderGenerator = yeoman.Base.extend({
 				_package.main = 'core/' + self.componentJsName;
 			}
 			/* create package.json */
-			this.writeFileFromString(
+			htmlWiring.writeFileFromString(
 				JSON.stringify( _package, null, "\t" ),
 				'package.json'
 			);
@@ -198,7 +198,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* create bower.json */
-			this.writeFileFromString(
+			htmlWiring.writeFileFromString(
 				_bower.split('{{name}}').join(this.componentName),
 				'bower.json'
 			);
@@ -208,7 +208,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* generate controller SCSS file */
-			this.writeFileFromString(
+			htmlWiring.writeFileFromString(
 				_controller.split('{{slug}}').join(this.componentSlug),
 				'_controller.scss'
 			);
@@ -218,35 +218,42 @@ var SpiderGenerator = yeoman.Base.extend({
 
 
 			/* generate theme SCSS file */
-			this.writeFileFromString(
-				_scss_theme.split('{{Name}}').join(this.componentName),
-				'theme/_' + this.componentSlug + '-theme.scss'
-			);
+			this.fs.copyTpl(
+	      this.templatePath(_scss_theme),
+	      this.destinationPath('theme/_' + this.componentSlug + '-theme.scss'),
+	      { name: this.componentName }
+	    );
 			console.log(chalk.green('   create ') + this.componentSlug + '-theme.scss');
 
 
 
-
 			/* generate core SCSS file */
-			this.writeFileFromString(
-				_scss_core.split('{{Name}}').join(this.componentName),
-				'core/_' + this.componentSlug + '.scss'
-			);
+			this.fs.copyTpl(
+	      this.templatePath(_scss_core),
+	      this.destinationPath('core/_' + this.componentSlug + '.scss'),
+	      { name: this.componentName }
+	    );
 			console.log(chalk.green('   create ') + this.componentSlug + '.scss');
-
 
 
 
 			/* generate core JS file */
 			if(this.componentJs!=='nope'){
-				this.writeFileFromString(
-					mustache.render(
-						_js_core,
-						{"modulename": self.componentJsName.split('.js').join(''), "repo": _repo}
-					),
-					'core/' + this.componentJsName
-				);
-				console.log(chalk.green('   create ') + this.componentJsName );
+				username().then(username => {
+					var _currDate = new Date();
+					this.fs.copyTpl(
+			      this.templatePath(_js_core),
+			      this.destinationPath('core/_' + this.componentJsName),
+			      {	"modulename": self.componentJsName.split('.js').join(''),
+							"repo"			: _repo,
+							"author"		: username || '',
+							"date"			: ("0" + _currDate.getDate()).substr(-2) + '.' + ("0" + (_currDate.getMonth() + 1)).substr(-2) + '.' + _currDate.getFullYear()
+						}
+			    );
+					console.log(chalk.green('   create ') + this.componentJsName );
+				});
+
+
 			}
 
 
@@ -284,7 +291,7 @@ var SpiderGenerator = yeoman.Base.extend({
 						var _projectController = htmlWiring.readFileAsString(_file);
 
 						/* inject reference to the component */
-						self.writeFileFromString(
+						htmlWiring.writeFileFromString(
 							_projectController.split(self.projectControllerMarker).join('@import "'+ self.componentPath +'/controller";' + "\n" + self.projectControllerMarker),
 							_file
 						);

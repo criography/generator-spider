@@ -1,10 +1,10 @@
 /* ===================================================================================
- * Name     : {{modulename}}
- * Version  : 1.0
- * URL      : {{repo}}
+ * Name     	: <%= modulename %>
+ * Version  	: 1.0
+ * URL      	: <%= repo %>
  *
- * Author   : {{author}}
- *            {{author-website}}
+ * Author   	: <%= author %>
+ * Created on	: <%= date %>
  *
  * Licensed under the MIT license.
  * ===================================================================================
@@ -21,7 +21,7 @@
 (function ($, window, document, undefined) {
 	"use strict";
 
-	var pluginName = '{{modulename}}',
+	var pluginName = '<%= modulename %>',
 	    defaults = {};
 
 
@@ -29,7 +29,7 @@
 
 
 	/* -----------------------------------------------------------------------------
-	 * {{modulename}}
+	 * <%= modulename %>
 	 * -----------------------------------------------------------------------------
 	 * @constructor
 	 * @private
@@ -37,7 +37,7 @@
 	 * @param {object} options parameters passed to the plugin
 	 * -----------------------------------------------------------------------------*/
 
-	function {{modulename}}(element, options){
+	function <%= modulename %>(element, options){
 		this.element = element;
 		this.options = $.extend({}, defaults, options);
 
@@ -46,7 +46,7 @@
 	}
 
 	/* -----------------------------------------------------------------------------
-	 * ENDOF: {{modulename}}
+	 * ENDOF: <%= modulename %>
 	 * -----------------------------------------------------------------------------*/
 
 
@@ -74,7 +74,7 @@
 	/**-----------------------------------------------------------------------------
 	 * PROTOTYPE METHODS [DOM/SUBJECT RELATED]
 	 * -----------------------------------------------------------------------------*/
-	{{modulename}}.prototype = {
+	<%= modulename %>.prototype = {
 
 
 		/**-----------------------------------------------------------------------------
@@ -121,7 +121,7 @@
 		return this.each(
 			function () {
 				if (!$.data(this, "plugin_" + pluginName)) {
-					$.data( this, "plugin_" + pluginName, new {{modulename}}(this, options) );
+					$.data( this, "plugin_" + pluginName, new <%= modulename %>(this, options) );
 				}
 			}
 		);
