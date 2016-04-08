@@ -119,7 +119,7 @@ var SpiderGenerator = yeoman.Base.extend({
 			this.componentJs    = props.componentJs;
 			this.componentJsName= props.componentJsName;
 
-			this.componentPath = this.componentType + 's/' + this.componentGroup + '/' + this.componentSlug;
+			this.componentPath = this.componentType + 's/' + (this.componentGroup ? this.componentGroup + '/' : '') + this.componentSlug;
 			this.componentRoot = './' + ( this.sockConfig['installer-path'] || 'components/' ) + this.componentPath + '/';
 			this.destinationRoot(this.componentRoot);
 
@@ -292,7 +292,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 						/* inject reference to the component */
 						htmlWiring.writeFileFromString(
-							_projectController.split(self.projectControllerMarker).join('@import "'+ self.componentPath +'/controller";' + "\n" + self.projectControllerMarker),
+							_projectController.split(self.projectControllerMarker).join('@import "'+ (self.sockConfig.componentPathPrefix || '') + self.componentPath +'/controller";' + "\n" + self.projectControllerMarker),
 							_file
 						);
 
