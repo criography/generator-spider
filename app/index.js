@@ -292,7 +292,7 @@ var SpiderGenerator = yeoman.Base.extend({
 
 						/* inject reference to the component */
 						htmlWiring.writeFileFromString(
-							_projectController.split(self.projectControllerMarker).join('@import "'+ (self.sockConfig.componentPathPrefix || '') + self.componentPath +'/controller";' + "\n" + self.projectControllerMarker),
+							_projectController.split(self.projectControllerMarker).join('@import "'+ (self.sockConfig.builders.scss.componentPathPrefix || '') + self.componentPath +'/controller";' + "\n" + self.projectControllerMarker),
 							_file
 						);
 
